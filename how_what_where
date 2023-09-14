@@ -1,0 +1,80 @@
+
+
+We encode geodesics in different ways. First a chains of instructions of the form ['L',5] or ['R',7]
+to which we refer as 'kette'. The important thing is that the 'L's and 'R's alternate.
+We also see geodesics as sequences of consecutive segments. Each segment is an instance of the class Note.
+A parti (partiture) is then a sequence of Notes, and hence encodes our geodesic.
+
+Each instance note of Note can have attributes like
+        note.tipo       with possible values 'A', 'B', and 'C'
+        note.sign       with possible values 1 and -1
+        note.inst       with instructions to the beginning of the next note, that is
+                            with things like ['L',5] or ['R',1]
+
+
+
+
+parti_tools.py              we deal with basic things to deal with ketten, partis and notes. More concretely:
+
+    - append_note()         appends an empty note to a parti
+    - parti_is_periodic()   checks if a parti corresponds to a periodic geodesic
+    - close_parti()         makes out of a parti a periodic parti
+    - print_parti()         prints the tipo,sign and inst of every note in parti
+    - compute_next_tipo()   given tipo + sign + inst computes the next tipo + sign
+    - word_to_kette()       transforms a word like 'RRRRRLLLRRRLLLRRRLLR' into a kette
+    - joint_ketten()        glus two ketten together
+    - extract_kette()       gets the kette inside a parti
+    - kette_to_parti()      gets a parti out of a kette
+    - join_partis()         joins two parties (so that the underlying kette is still a kette)
+    - expand_parti()        goes from a parti with things like ['L',2] to one with ['L',1] and again ['L',1]
+    - longer_parti()        iterates a parti to get it long enough
+    - get_affixes()         gets suffx/prefix of a note, that is what comes before and after
+
+get_parti.py                we deal with the different ways of getting a parti
+
+    - wanna_quit()          checks if one wants to quit (if x='q' or 'Q') and quits, or not
+    - custom_parti()        you can input a word like LRRLRLLLLR and it produces a periodic hyper parti
+    - matrix_parti()        you can enter an element in SL_2N and it produces a periodic hyper parti
+    - find_right_estimated() picks in a very long parti a sub parti of approximately given length
+    - length_overestimate() gives you an upper bound for the geodesic corresponding to a periodic parti
+    - random_parti()        gets out of a long random party a periodic hyper party of given length (up to a GAP)
+    - farey_parti()         same thing but starting with a Farey random ray
+    - random_simple_kette() get a random simple parti with approximatedly given length
+
+combinatorial_parti.py      there are the things to compute intersection numbers between parties. Eventually there
+                            should be the other combinatorial things there.
+
+    - expand_parti()        passes from a parti with ['L',2],['R',7] to one with ['L',1] and ['R',1]
+    - is_first_in_common()  tells you if two positions in two parties are equal and if they are the first
+                            in common
+    - forward_branching()   detects in which direction is there branching in forward direction
+    - is_intersection_point() decides if two positions in two parties yield an intersection point
+    - compute_intersection_number() computes the geometric intersection number of two partis
+    - parti_homology()      TO BE WRITTEN --- SHOULD COMPUTE THE HOMOLOGY CLASS OF A PERIODIC PARTI
+
+input_tools                 there are ingredients to some version of a multiple choice menu
+
+    - what_shear()          asks what shear one wants (so far, it is unused)
+    - what_geodesic()       asks what kind of geodesic does one want to work with
+    - what_length()         asks how long the geodesic should be
+    - get_desired_parti()   this is where one gets the desired parti
+    - global_get_parti()    gives a menu with different options (this is kind of old and maybe should be out)
+
+hyper_tools                 basically what one needs of hyperbolic geometry
+
+    Note: All of them work for non-expanded parti
+
+    - read_shear()          converts each shear into a 2x2 matrix transformation
+    - mob_linear()          calculates what a 2x2 matrix does on a vector in R^2
+    - mob_part_linear()     calculates what the 2x2 matrix correspondind to a parti (taking shear into account)
+                            does to a vector in R^2
+    - computed_translation_length() uses the trace to calculate the translation length of an element in SL_2R
+    - mob_hyp()             calculates the image of a point in the upper-half plane under a Moebious transformation
+    - mob_parti_hyp()       calculates the image of a point in the upper-half plane (taking shear into account)
+    - compute_fixed_points() calculates the eta and bareta
+    - compute_point()       computes the intersection points
+    - pull_point()          computes the pulled-back point
+    - hyp_distance()        calculates the distance between two points in the upper-half plane
+    - hyper_parti()         adds the hyperbolic information to the parti (not expanded!)
+    - length_hyper_parti()  calculates the length of a parti
+

@@ -1,0 +1,47 @@
+
+Sources of geodesics:
+- Random geodesics (maybe with respect to parameters?)
+- Random word in \pi_1 (or Random Farey, if one really wants)
+- Random simple
+- enter an element in \pi_1
+- enter a matrix
+- apply a mapping class
+
+        One has to decide if one is ok forcing the geodesic to go from left to right in the imaginary axis
+
+What to do with individual geodesics I --- combinatorial:
+- Continued fraction expansion (at least if square torus)
+- linking number of Lorentz knot (again for square torus)    (?)
+- self-intersection number
+- homology class
+
+What to do with individual geodesics II --- geometric with parameters:
+- length
+- depth in cusps
+- longest time in a cusp
+- proportion of time in cusp
+- intersection angles with edges of triangulation
+
+What to do about parameters
+- find systole
+- find maximal stretch lamination
+- find parameters minimizing length of given curve
+
+Sources of sequences of geodesics:
+- Sequences of geodesics out of a random ray
+- Random simple geodesics
+- Iterate PA
+- Random sequence in Map
+
+What to do with sequences of geodesics:
+- i(gamma,gamma)/l(gamma)^2
+- i(gamma,alpha)/l(gamma)
+- size of homology class
+- Thurston ball
+- limiting lamination
+
+Others
+- intersection of simple random geodesics (single and expectation)
+
+
+
