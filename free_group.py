@@ -1,4 +1,21 @@
+import deep_tools
+
 ''' deal with elements in the fundamental group '''
+
+
+def get_element_in_free():
+    attempt = False
+    while not attempt:
+        print("    A,B represent the generators of F_2 and a,b are their inverses.")
+        print("    A word is 'admissible' if can be conjugated to a cyclically reduced word starting by A.")
+        word = input("    Enter an admissible word such as in ABBaabABabAA or press 'Q' to quit:  ")
+        deep_tools.wanna_quit(word)
+
+        if check_free_word(word):
+            attempt = True
+        else:
+            pass
+    return word
 
 
 def check_free_word(word):    # makes sure that the element in F_2 consists just of A,a,b,B

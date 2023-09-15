@@ -32,7 +32,6 @@ parti_tools.py              we deal with basic things to deal with ketten, parti
 
 get_parti.py                we deal with the different ways of getting a parti
 
-    - wanna_quit()          checks if one wants to quit (if x='q' or 'Q') and quits, or not
     - custom_parti()        you can input a word like LRRLRLLLLR and it produces a periodic parti
     - free_group_parti()    you can input an element in pi_1=F_2 and it produces a periodic parti
     - matrix_parti()        you can enter an element in SL_2N and it produces a periodic parti
@@ -45,6 +44,7 @@ get_parti.py                we deal with the different ways of getting a parti
 free_group.py               basically to translate from words in pi_1=F_2 to words in LR
 
     - check_free_word()     checks if a word could actually give an element in F_2
+    - get_element_in_free() gets from you to input an element in F_2
     - free_word_to_tree_path()  converts a word in F_2 into a path in the Farey tree with edges labeled AaBbCc
     - conjugate_tree_path() if possible it translates the path so that it starts with A
     - local_direction()     reads if a turn in the tree is to the left or to the right
@@ -72,6 +72,9 @@ input_tools                 there are ingredients to some version of a multiple 
     - length_intersection() gets a random geodesic, asks for a simple one, and then computes the lengths
                             via the intersection number
     - check_intersection()   asks for two curves and computes their intersection number.
+    - track_random_walk_map()   tracks what a random walk in the mapping class group does to a curve
+    - track_power_of_map()   tracks what a powers of a mapping class do to a curve
+
 
 hyper_tools                 basically what one needs of hyperbolic geometry
 
@@ -91,3 +94,11 @@ hyper_tools                 basically what one needs of hyperbolic geometry
     - hyper_parti()         adds the hyperbolic information to the parti (not expanded!)
     - length_hyper_parti()  calculates the length of a parti
 
+mapping_class_action.py     whatever one needs to deal with mapping classes
+    - get_mapping_class()   gets from you a mapping class and converts it into L's and R's
+    - elementary_map_on_free()  applies the dehn twists L and R to a curve
+    - mapclass_on_free()    applies a mapping class to an element of F_2
+
+deep_tools.py               contains tools that all might use
+
+    - wanna_quit()          checks if one wants to quit (if x='q' or 'Q') and quits, or not

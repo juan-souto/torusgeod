@@ -3,19 +3,15 @@ import hyper_tools
 import math
 import random
 import free_group
+import deep_tools
 
 
-def wanna_quit(x):
-    if x in ['q', 'Q']:
-        exit()
-    else:
-        pass
 
 def custom_parti():
     attempt = False
     while not attempt:
         word = input("    Enter a sequence of 'L's and 'R's as in LRRRLRRLLRL or press 'Q' to quit:  ")
-        wanna_quit(word)
+        deep_tools.wanna_quit(word)
 
         problem = False
         for x in word:
@@ -45,17 +41,8 @@ def custom_parti():
 
 def free_group_parti():
     attempt = False
-    while not attempt:
-        print("    A,B represent the generators of F_2 and a,b are their inverses.")
-        print("    A word is 'admissible' if can be conjugated to a cyclically reduced word starting by A.")
-        word = input("    Enter an admissible word such as in ABBaabABabAA or press 'Q' to quit:  ")
-        wanna_quit(word)
-
-        if free_group.check_free_word(word):
-            word = free_group.translate_free_word_to_directions(word)
-            attempt = True
-        else:
-            pass
+    word = free_group.get_element_in_free()
+    word = free_group.translate_free_word_to_directions(word)
 
     parti = []
     kette = parti_tools.word_to_kette(word)
@@ -63,7 +50,7 @@ def free_group_parti():
     if parti_tools.parti_is_periodic(parti):
         pass
     else:
-        print("The word you gave me was not closed --- I closed it up")
+        print("Problem: The parti seems to be not closed --- I closed it up")
         parti = parti_tools.close_parti(parti)
 
     return parti
@@ -80,13 +67,13 @@ def matrix_parti():
         A = [[0, 0], [0, 0]]
 
         A[0][0] = input('A_{1,1} = ')
-        wanna_quit(A[0][0])
+        deep_tools.wanna_quit(A[0][0])
         A[1][0] = input('A_{1,2} = ')
-        wanna_quit(A[1][0])
+        deep_tools.wanna_quit(A[1][0])
         A[0][1] = input('A_{2,1} = ')
-        wanna_quit(A[0][1])
+        deep_tools.wanna_quit(A[0][1])
         A[1][1] = input('A_{2,2} = ')
-        wanna_quit(A[1][1])
+        deep_tools.wanna_quit(A[1][1])
 
         if not A[0][0].isdigit() or not A[0][1].isdigit() or not A[1][0].isdigit() or not A[1][1].isdigit():
             print("Entries have to be numbers")

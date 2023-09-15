@@ -1,9 +1,14 @@
+import free_group
 import hyper_tools
 import math
 import time
 import get_parti
 import combinatorial_parti
+import deep_tools
+import random
 
+import mapping_class_action
+import parti_tools
 
 
 def what_shear():
@@ -33,7 +38,7 @@ def what_geodesic():
                        "            'Q' quit.\n"
                        "    "
                        "Choice:  ")
-        get_parti.wanna_quit(decide)
+        deep_tools.wanna_quit(decide)
         if decide in ['1', '2', '3', '4', '5', '6']:
             print('')
             attempt = True
@@ -143,3 +148,49 @@ def check_intersection():
         parti1 = get_parti.custom_parti()
         parti2 = get_parti.custom_parti()
         print(combinatorial_parti.compute_intersection_number(parti1, parti2))
+
+
+def track_random_walk_map():
+    shear=[0,0,0]
+    baseword = "AB"
+    mapclass = ''
+    hand = ''
+    while True:
+        flip = random.randint(0,1)
+        if flip == 0:
+            hand += 'L'
+        else:
+            hand += 'R'
+        mapclass = mapclass + hand
+        word = mapping_class_action.mapclass_on_free(mapclass,baseword)
+        directions = free_group.translate_free_word_to_directions(word)
+        kette = parti_tools.word_to_kette(directions)
+        parti = parti_tools.kette_to_parti(kette)
+        homology = combinatorial_parti.parti_homology(parti)
+        homology_size = abs(homology[0])+abs(homology[1])
+        lamination = [homology[0]/homology_size,homology[1]/homology_size]
+        parti = hyper_tools.hyper_parti(parti,shear)
+        length = hyper_tools.length_hyper_parti(parti)
+
+        print('l = ',length,' size of homology = ',homology_size,' looks like lamination = ',lamination)
+        time.sleep(1)
+
+
+def track_powers_of_map():
+    shear=[0,0,0]
+    word = "AB"
+    mapclass=mapping_class_action.get_mapping_class()
+    while True:
+        for x in mapclass:
+            word = mapping_class_action.elementary_map_on_free(x,word)
+        directions = free_group.translate_free_word_to_directions(word)
+        kette = parti_tools.word_to_kette(directions)
+        parti = parti_tools.kette_to_parti(kette)
+        homology = combinatorial_parti.parti_homology(parti)
+        homology_size = abs(homology[0])+abs(homology[1])
+        lamination = [homology[0]/homology_size,homology[1]/homology_size]
+        parti = hyper_tools.hyper_parti(parti,shear)
+        length = hyper_tools.length_hyper_parti(parti)
+
+        print('l = ',length,' size of homology = ',homology_size,' looks like lamination = ',lamination)
+        time.sleep(1)
