@@ -113,4 +113,28 @@ def global_get_parti():
         print('')
 
 
+def length_intersection():
+    while True:
+        shear=[0,0,0]
+        desired_length = what_length()
 
+        random_parti = get_parti.random_parti(desired_length,shear)
+        custom_parti = get_parti.custom_parti()
+        custom_parti = hyper_tools.hyper_parti(custom_parti, shear)
+
+        intersection_number1 = combinatorial_parti.compute_intersection_number(random_parti, custom_parti)
+        length1 = hyper_tools.length_hyper_parti(custom_parti)
+        intersection_number2 = combinatorial_parti.compute_intersection_number(random_parti, random_parti)
+        length2 = hyper_tools.length_hyper_parti(random_parti)
+        print("Custom length : ",length1)
+        print("Random length : ",length2)
+        print("Bonahon random length: ",intersection_number2*(math.pi**2)/length2)
+        print("Bonahon custom length: ",intersection_number1*(math.pi**2)/length2)
+        print("Random error :",100*(intersection_number2*(math.pi**2)/length2-length2)/length2," %")
+        print("Custom error :",100*(intersection_number1*(math.pi**2)/length2-length1)/length1," %")
+
+def check_intersection():
+    while True:
+        parti1 = get_parti.custom_parti()
+        parti2 = get_parti.custom_parti()
+        print(combinatorial_parti.compute_intersection_number(parti1, parti2))

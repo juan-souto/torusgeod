@@ -59,6 +59,9 @@ input_tools                 there are ingredients to some version of a multiple 
     - what_length()         asks how long the geodesic should be
     - get_desired_parti()   this is where one gets the desired parti
     - global_get_parti()    gives a menu with different options (this is kind of old and maybe should be out)
+    - length_intersection() gets a random geodesic, asks for a simple one, and then computes the lengths
+                            via the intersection number
+    - check_intersetion()   asks for two curves and computes their intersection number.
 
 hyper_tools                 basically what one needs of hyperbolic geometry
 
