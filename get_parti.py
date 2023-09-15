@@ -2,6 +2,7 @@ import parti_tools
 import hyper_tools
 import math
 import random
+import free_group
 
 
 def wanna_quit(x):
@@ -27,6 +28,34 @@ def custom_parti():
         else:
             word=word.upper()
             attempt = True
+
+    parti = []
+    kette = parti_tools.word_to_kette(word)
+    parti = parti_tools.kette_to_parti(kette)
+    if parti_tools.parti_is_periodic(parti):
+        pass
+    else:
+        print("The word you gave me was not closed --- I closed it up")
+        parti = parti_tools.close_parti(parti)
+
+    return parti
+
+
+''' enter a word in F_2 '''
+
+def free_group_parti():
+    attempt = False
+    while not attempt:
+        print("    A,B represent the generators of F_2 and a,b are their inverses.")
+        print("    A word is 'admissible' if can be conjugated to a cyclically reduced word starting by A.")
+        word = input("    Enter an admissible word such as in ABBaabABabAA or press 'Q' to quit:  ")
+        wanna_quit(word)
+
+        if free_group.check_free_word(word):
+            word = free_group.translate_free_word_to_directions(word)
+            attempt = True
+        else:
+            pass
 
     parti = []
     kette = parti_tools.word_to_kette(word)
@@ -251,8 +280,5 @@ def random_simple_kette(length,shear):
 #    print(hyper_tools.length_hyper_parti(parti))
 
     return parti
-
-
-
 
 

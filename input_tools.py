@@ -28,12 +28,13 @@ def what_geodesic():
                        "            '2' farey geodesic, \n"
                        "            '3' random simple geodesic, \n"
                        "            '4' custom sequence of Ls and Rs,\n"
-                       "            '5' matrix,\n"
+                       "            '5' custom element in pi_1,\n"
+                       "            '6' matrix,\n"
                        "            'Q' quit.\n"
                        "    "
                        "Choice:  ")
         get_parti.wanna_quit(decide)
-        if decide in ['1', '2', '3', '4', '5']:
+        if decide in ['1', '2', '3', '4', '5', '6']:
             print('')
             attempt = True
         else:
@@ -67,6 +68,10 @@ def get_desired_parti(shear):
         parti = get_parti.custom_parti()
         start = None
         desired_length = 1000
+    elif decide == '5':
+        parti = get_parti.free_group_parti()
+        start = None
+        desired_length = 1000
     else:
         parti = get_parti.matrix_parti()
         start = None
@@ -85,7 +90,7 @@ def global_get_parti():
             print("Length via trace        : ", computed_length)
         else:
             print('The desired length is too big for it to be computed via the trace')
-        if decide in ['4','5']:
+        if decide not in ['1','2','3']:
             parti = hyper_tools.hyper_parti(parti,shear)
         else:
             pass
