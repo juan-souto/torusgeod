@@ -33,13 +33,23 @@ parti_tools.py              we deal with basic things to deal with ketten, parti
 get_parti.py                we deal with the different ways of getting a parti
 
     - wanna_quit()          checks if one wants to quit (if x='q' or 'Q') and quits, or not
-    - custom_parti()        you can input a word like LRRLRLLLLR and it produces a periodic hyper parti
-    - matrix_parti()        you can enter an element in SL_2N and it produces a periodic hyper parti
+    - custom_parti()        you can input a word like LRRLRLLLLR and it produces a periodic parti
+    - free_group_parti()    you can input an element in pi_1=F_2 and it produces a periodic parti
+    - matrix_parti()        you can enter an element in SL_2N and it produces a periodic parti
     - find_right_estimated() picks in a very long parti a sub parti of approximately given length
     - length_overestimate() gives you an upper bound for the geodesic corresponding to a periodic parti
     - random_parti()        gets out of a long random party a periodic hyper party of given length (up to a GAP)
     - farey_parti()         same thing but starting with a Farey random ray
     - random_simple_kette() get a random simple parti with approximatedly given length
+
+free_group.py               basically to translate from words in pi_1=F_2 to words in LR
+
+    - check_free_word()     checks if a word could actually give an element in F_2
+    - free_word_to_tree_path()  converts a word in F_2 into a path in the Farey tree with edges labeled AaBbCc
+    - conjugate_tree_path() if possible it translates the path so that it starts with A
+    - local_direction()     reads if a turn in the tree is to the left or to the right
+    - tree_path_directions()    translates a path in the tree into a sequence of L,R instructions
+    - translate_free_word_to_directions()   does exactly that
 
 combinatorial_parti.py      there are the things to compute intersection numbers between parties. Eventually there
                             should be the other combinatorial things there.
@@ -61,7 +71,7 @@ input_tools                 there are ingredients to some version of a multiple 
     - global_get_parti()    gives a menu with different options (this is kind of old and maybe should be out)
     - length_intersection() gets a random geodesic, asks for a simple one, and then computes the lengths
                             via the intersection number
-    - check_intersetion()   asks for two curves and computes their intersection number.
+    - check_intersection()   asks for two curves and computes their intersection number.
 
 hyper_tools                 basically what one needs of hyperbolic geometry
 

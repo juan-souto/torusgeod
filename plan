@@ -16,15 +16,15 @@ What to do with individual geodesics I --- combinatorial:
 
 What to do with individual geodesics II --- geometric with parameters:
 - length
-- depth in cusps
-- longest time in a cusp
-- proportion of time in cusp
-- intersection angles with edges of triangulation
+- depth in cusps                                            TBD
+- longest time in a cusp                                    TBD
+- proportion of time in cusp                                TBD
+- intersection angles with edges of triangulation           TBD
 
 What to do about parameters
-- find systole
-- find maximal stretch lamination
-- find parameters minimizing length of given curve
+- find systole                                              TBD
+- find maximal stretch lamination                           TBD
+- find parameters minimizing length of given curve          TBD
 
 Sources of sequences of geodesics:
 - Sequences of geodesics out of a random ray
