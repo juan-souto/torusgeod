@@ -194,3 +194,11 @@ def track_powers_of_map():
 
         print('l = ',length,' size of homology = ',homology_size,' looks like lamination = ',lamination)
         time.sleep(1)
+
+
+def compare_in_different_tori():
+    shear = [-5, 2, 3]
+    parti = get_parti.random_parti(200,[0,0,0])
+    print(hyper_tools.length_hyper_parti(parti))
+    parti2 = hyper_tools.hyper_parti(parti,shear)
+    print(hyper_tools.length_hyper_parti(parti))
