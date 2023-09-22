@@ -204,7 +204,6 @@ def hyper_parti(parti, shear=None):  # checked
         exit()
 
     for k in range(len(parti)):
-#        [suffix, prefix] = parti_tools.get_affixes(parti, k)
         parti[k].point = compute_point(parti[k].suffix, parti[k].prefix, shear)
 
     for k in range(len(parti)):
