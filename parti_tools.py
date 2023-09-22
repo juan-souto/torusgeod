@@ -247,6 +247,13 @@ def get_affixes(parti, pos):  # checked
     return [suffix, prefix]
 
 
+def add_affixes(parti):
+    for k in range(len(parti)):
+        [suff,pref]=get_affixes(parti,k)
+        parti[k].suffix = suff
+        parti[k].prefix = pref
+    return parti
+
 
 
 

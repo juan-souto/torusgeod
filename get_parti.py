@@ -14,6 +14,10 @@ def custom_parti():
         deep_tools.wanna_quit(word)
 
         problem = False
+        if len(word) == 0:
+            problem = True
+        else:
+            pass
         for x in word:
             if x not in ['L','R','l','r']:
                 problem = True
@@ -159,6 +163,8 @@ def random_parti(desired_length,shear):
             k += 1
         new_parti = parti_tools.kette_to_parti(kette)
         new_parti = parti_tools.close_parti(new_parti)
+        new_parti = parti_tools.add_affixes(new_parti)
+
         new_parti = hyper_tools.hyper_parti(new_parti,shear)
         length = hyper_tools.length_hyper_parti(new_parti)
 
@@ -201,6 +207,8 @@ def farey_parti(desired_length,shear):
             k += 1
         new_parti = parti_tools.kette_to_parti(kette)
         new_parti = parti_tools.close_parti(new_parti)
+        new_parti = parti_tools.add_affixes(new_parti)
+
         new_parti = hyper_tools.hyper_parti(new_parti,shear)
         length = hyper_tools.length_hyper_parti(new_parti)
 
@@ -253,6 +261,8 @@ def random_simple_kette(length,shear):
 
         short_parti = parti_tools.kette_to_parti(short_kette)
         short_parti = parti_tools.close_parti(short_parti)
+        short_parti = parti_tools.add_affixes(short_parti)
+
         short_parti = hyper_tools.hyper_parti(short_parti)
         short_length = hyper_tools.length_hyper_parti(short_parti)
 
@@ -263,6 +273,8 @@ def random_simple_kette(length,shear):
 
     parti = parti_tools.kette_to_parti(kette)
     parti = parti_tools.close_parti(parti)
+    parti = parti_tools.add_affixes(parti)
+
     parti = hyper_tools.hyper_parti(parti,shear)
 #    print(hyper_tools.length_hyper_parti(parti))
 

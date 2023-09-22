@@ -13,8 +13,17 @@ import parti_tools
 
 def what_shear():
     print("Enter the shearing coordinates of the torus you want to work with:")
-    shear_A = float(input("Shear at arc 'A': "))
-    shear_B = float(input("Shear at arc 'B': "))
+    shear_A = input("Shear at arc 'A': ")
+    if shear_A.isdigit():
+        shear_A = float(shear_A)
+    else:
+        shear_A = 0
+    shear_B = input("Shear at arc 'B': ")
+    if shear_B.isdigit():
+        shear_B = float(shear_B)
+    else:
+        shear_B = 0
+
     print("Shear at arc C (default is ", end='')
     print(-shear_A - shear_B, end="")
     shear_C = input(" so that the peripheral curve is parabolic): ")
@@ -96,6 +105,7 @@ def global_get_parti():
         else:
             print('The desired length is too big for it to be computed via the trace')
         if decide not in ['1','2','3']:
+            parti = parti_tools.add_affixes(parti)
             parti = hyper_tools.hyper_parti(parti,shear)
         else:
             pass
@@ -130,6 +140,8 @@ def length_intersection():
 
         random_parti = get_parti.random_parti(desired_length,shear)
         custom_parti = get_parti.custom_parti()
+        custom_parti = parti_tools.add_affixes(custom_parti)
+
         custom_parti = hyper_tools.hyper_parti(custom_parti, shear)
 
         intersection_number1 = combinatorial_parti.compute_intersection_number(random_parti, custom_parti)
@@ -169,6 +181,8 @@ def track_random_walk_map():
         homology = combinatorial_parti.parti_homology(parti)
         homology_size = abs(homology[0])+abs(homology[1])
         lamination = [homology[0]/homology_size,homology[1]/homology_size]
+        parti = parti_tools.add_affixes(parti)
+
         parti = hyper_tools.hyper_parti(parti,shear)
         length = hyper_tools.length_hyper_parti(parti)
 
@@ -189,6 +203,8 @@ def track_powers_of_map():
         homology = combinatorial_parti.parti_homology(parti)
         homology_size = abs(homology[0])+abs(homology[1])
         lamination = [homology[0]/homology_size,homology[1]/homology_size]
+        parti = parti_tools.add_affixes(parti)
+
         parti = hyper_tools.hyper_parti(parti,shear)
         length = hyper_tools.length_hyper_parti(parti)
 
@@ -200,5 +216,7 @@ def compare_in_different_tori():
     shear = [-5, 2, 3]
     parti = get_parti.random_parti(200,[0,0,0])
     print(hyper_tools.length_hyper_parti(parti))
+    parti = parti_tools.add_affixes(parti)
+
     parti2 = hyper_tools.hyper_parti(parti,shear)
     print(hyper_tools.length_hyper_parti(parti))
