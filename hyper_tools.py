@@ -24,11 +24,13 @@ def read_shear(tipo, shear, direction):  # checked
             mob = [[math.exp(shear[1] / 2), 0], [0, math.exp(-shear[1] / 2)]]
         else:
             mob = [[math.exp(-shear[1] / 2), 0], [0, math.exp(shear[1] / 2)]]
-    else:
+    elif tipo == 'C':
         if direction:
             mob = [[math.exp(shear[2] / 2), 0], [0, math.exp(-shear[2] / 2)]]
         else:
             mob = [[math.exp(-shear[2] / 2), 0], [0, math.exp(shear[2] / 2)]]
+    else:
+        print('you got a problem')
     return mob
 
 
@@ -164,9 +166,12 @@ def compute_point(given_suffix, given_prefix, shear=None):  # checked
     center = (eta + bareta) / 2
     radius = (eta - bareta) / 2
 
-    point = [0, math.sqrt(radius ** 2 - center ** 2)]
+    height = math.sqrt(radius ** 2 - center ** 2)
 
-    return point
+    point = [0, height]
+    cos_angle = center/radius
+
+    return [point,cos_angle]
 
 
 def pull_point(parti, pos, point,shear=None):  # checked
@@ -204,10 +209,11 @@ def hyper_parti(parti, shear=None):  # checked
         exit()
 
     for k in range(len(parti)):
-        parti[k].point = compute_point(parti[k].suffix, parti[k].prefix, shear)
+        [parti[k].point,parti[k].cos] = compute_point(parti[k].suffix, parti[k].prefix, shear)
 
     for k in range(len(parti)):
-        parti[k].length = hyp_distance(pull_point(parti,k, parti[k].point, shear), parti[(k + 1) % len(parti)].point)
+        pulled_point = pull_point(parti,k, parti[k].point, shear)
+        parti[k].length = hyp_distance(pulled_point, parti[(k + 1) % len(parti)].point)
 
     return parti
 
@@ -220,13 +226,62 @@ def length_hyper_parti(parti):  # checked
     return length
 
 
+def min_gap_parti(parti):
+    gap=100000
+    for x in parti:
+        gap = min(gap,x.length)
+    return gap
+
+
+'''
+def hyper_der_parti(parti, shear=None):  # checked
+    ###########################################
+    # parti NEEDS will be expanded
+    ###########################################
+    if shear is None:
+        shear = [0, 0, 0]
+    else:
+        pass
+    if parti_tools.parti_is_periodic(parti):
+        pass
+    else:
+        print('parti is not periodic')
+        exit()
+
+
+    for k in range(len(parti)):
+        parti[k].point = compute_point(parti[k].suffix, parti[k].prefix, shear)[0]
+
+    for k in range(len(parti)):
+        pulled_point = pull_point(parti,k, parti[k].point, shear)
+        parti[k].length = hyp_distance(pulled_point, parti[(k + 1) % len(parti)].point)
+        parti[(k + 1)%len(parti)].der = parti[(k + 1)%len(parti)].sign * compute_angle(pulled_point, parti[(k + 1) % len(parti)].point)
+
+    return parti
+'''
+
+def read_der_parti(parti):
+    der = [0,0,0]
+    for k in range(len(parti)):
+        if parti[k].tipo == 'A':
+            der[0] = der[0] + parti[k].cos
+        elif parti[k].tipo == 'B':
+            der[1] = der[1] + parti[k].cos
+        elif parti[k].tipo == 'C':
+            der[2] = der[2] + parti[k].cos
+        else:
+            print('You got a problem')
+            exit()
+
+    return der
+
+
+
+
 
 #
 # Still to be done
 #
-
-def calculate_angle(parti, pos, shear=None):
-    pass
 
 
 def highest_point(parti, pos, shear=None):

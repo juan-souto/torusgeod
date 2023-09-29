@@ -6,6 +6,7 @@ import get_parti
 import combinatorial_parti
 import deep_tools
 import random
+import minimisation
 
 import mapping_class_action
 import parti_tools
@@ -14,12 +15,12 @@ import parti_tools
 def what_shear():
     print("Enter the shearing coordinates of the torus you want to work with:")
     shear_A = input("Shear at arc 'A': ")
-    if shear_A.isdigit():
+    if deep_tools.isDigit(shear_A):
         shear_A = float(shear_A)
     else:
         shear_A = 0
     shear_B = input("Shear at arc 'B': ")
-    if shear_B.isdigit():
+    if deep_tools.isDigit(shear_B):
         shear_B = float(shear_B)
     else:
         shear_B = 0
@@ -27,7 +28,7 @@ def what_shear():
     print("Shear at arc C (default is ", end='')
     print(-shear_A - shear_B, end="")
     shear_C = input(" so that the peripheral curve is parabolic): ")
-    if shear_C.isdigit():
+    if deep_tools.isDigit(shear_C):
         shear_C = float(shear_C)
     else:
         shear_C = -shear_A - shear_B
@@ -95,8 +96,9 @@ def get_desired_parti(shear):
 
 
 def global_get_parti():
-    shear = what_shear()
     while True:
+        shear = what_shear()
+
         [parti,start_time,decide,desired_length] = get_desired_parti(shear)
         if desired_length < 1200:
             computed_length = hyper_tools.computed_translation_length(parti,shear)
@@ -110,13 +112,24 @@ def global_get_parti():
         else:
             pass
         actual_length = hyper_tools.length_hyper_parti(parti)
+        der = hyper_tools.read_der_parti(parti)
         length_time = time.time()
         intersection_number = combinatorial_parti.compute_intersection_number(parti, parti)
         inter_time = time.time()
         homology = combinatorial_parti.parti_homology(parti)
+        if len(parti)<10:
+            parti_tools.print_parti(parti)
+
+        mat1 = hyper_tools.mob_parti_linear(parti, [1, 0], shear)
+        mat2 = hyper_tools.mob_parti_linear(parti, [0, 1], shear)
 
         print('')
+        print("Shear                   : ",shear)
         print("Length                  : ", actual_length)
+        print("Derivative              : ", der)
+        print("Matrix                  : ",mat1[0],"  ",mat2[0])
+        print("                          ",mat1[1],"  ",mat2[1])
+
         print('Self-Intersection number: ', intersection_number)
         print('Homology class          : ', homology)
         if decide == '1':
@@ -161,6 +174,10 @@ def check_intersection():
         parti2 = get_parti.custom_parti()
         print(combinatorial_parti.compute_intersection_number(parti1, parti2))
 
+
+#------------------------------------------
+#------------------------------------------
+#------------------------------------------
 
 def track_random_walk_map():
     shear=[0,0,0]
@@ -220,3 +237,36 @@ def compare_in_different_tori():
 
     parti2 = hyper_tools.hyper_parti(parti,shear)
     print(hyper_tools.length_hyper_parti(parti))
+
+
+def total_minimisation(parti,shear):
+    parti = parti_tools.expand_parti(parti)
+    parti = parti_tools.add_affixes(parti)
+
+    [new_shear,length] = minimisation.gradient_descent(parti,shear)
+
+    print('')
+    print('It seems that the length is minimised around ',new_shear)
+    print('   The length function takes there the value ',length)
+    print('')
+    radius = len(parti)/10000
+    print('I am checking 5000 points at distance ',radius,' from that point...')
+
+    [min_length,min_shear]=minimisation.minimize_around(parti,new_shear,radius,5000)
+
+    if min_length>length:
+        print("Indeed, I didn't find any better point")
+    else:
+        print("CELHP!!! I found a better point... The value of the length there is ",min_length)
+        print('Let me look a bit further...')
+        print('I am checking 5000 points at distance ', 10*radius, ' from that point...')
+
+        [min_length, min_shear] = minimisation.minimize_around(parti, new_shear, 10*radius, 5000)
+        if min_length > length:
+            print("Ok, now I didn't find any better point")
+        else:
+            print("FFS!!! Again a better point... The value of the length there is ", min_length)
+            print("I give up!")
+
+
+

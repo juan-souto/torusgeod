@@ -38,6 +38,9 @@ def custom_parti():
         print("The word you gave me was not closed --- I closed it up")
         parti = parti_tools.close_parti(parti)
 
+    parti = parti_tools.expand_parti(parti)
+    parti = parti_tools.add_affixes(parti)
+
     return parti
 
 
@@ -56,6 +59,8 @@ def free_group_parti():
     else:
         print("Problem: The parti seems to be not closed --- I closed it up")
         parti = parti_tools.close_parti(parti)
+
+    parti = parti_tools.add_affixes(parti)
 
     return parti
 
