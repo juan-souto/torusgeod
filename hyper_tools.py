@@ -10,8 +10,6 @@ MobRInv = [[1, -1], [0, 1]]
 # bareta is repelling fixed point
 
 
-''' This gives the shear mob for every edge'''
-
 
 def read_shear(tipo, shear, direction):  # checked
     if tipo == 'A':
@@ -34,17 +32,65 @@ def read_shear(tipo, shear, direction):  # checked
     return mob
 
 
-''' 
-The next functions deal with elements in SL_2R as linear maps. The point is to be able to 
- compute the trace and hence the length in a different way.
- '''
-
 
 def mob_linear(mob, given_point):   # checked
     new0 = mob[0][0]*given_point[0]+mob[1][0]*given_point[1]
     new1 = mob[0][1]*given_point[0]+mob[1][1]*given_point[1]
 
     return [new0, new1]
+
+
+
+def mult_free_group_basis(tipo,shear,x):
+    if tipo == 'A':
+        x = mob_linear(MobR,x)
+        x = mob_linear(read_shear('C',shear,True),x)
+        x = mob_linear(MobL,x)
+        x = mob_linear(read_shear('A',shear,True),x)
+    elif tipo == 'a':
+        x = mob_linear(read_shear('A',shear,False),x)
+        x = mob_linear(MobLInv,x)
+        x = mob_linear(read_shear('C',shear,False),x)
+        x = mob_linear(MobRInv,x)
+    elif tipo == 'B':
+        x = mob_linear(read_shear('A', shear, False), x)
+        x = mob_linear(MobLInv,x)
+        x = mob_linear(MobR,x)
+        x = mob_linear(read_shear('B',shear,True),x)
+        x = mob_linear(MobL,x)
+        x = mob_linear(read_shear('C',shear,True),x)
+        x = mob_linear(MobL,x)
+        x = mob_linear(read_shear('A',shear,True),x)
+    elif tipo == 'b':
+        x = mob_linear(read_shear('A', shear, False), x)
+        x = mob_linear(MobLInv,x)
+        x = mob_linear(read_shear('C',shear,False),x)
+        x = mob_linear(MobLInv,x)
+        x = mob_linear(read_shear('B',shear,False),x)
+        x = mob_linear(MobRInv,x)
+        x = mob_linear(MobL,x)
+        x = mob_linear(read_shear('A',shear,True),x)
+    return x
+
+
+
+def trace_free_group_word(word,shear):
+    x = [1,0]
+    y = [0,1]
+    for k in word:
+        x = mult_free_group_basis(k,shear,x)
+        y = mult_free_group_basis(k,shear,y)
+
+    trace = x[0]+y[1]
+    return abs(trace)
+
+
+def length_trace_free_group_word(word,shear):
+    trace = trace_free_group_word(word,shear)
+    if trace == 2:
+        return 0
+    else:
+        return 2*math.acosh(trace/2)
 
 
 def mob_parti_linear(parti, point, shear=None):  # checked
@@ -82,10 +128,8 @@ def computed_translation_length(parti,shear): # checked
     else:
         return 2*math.acosh(trace/2)
 
+    return [len_a,len_b]
 
-'''
-The following functions deal with elements in SL_2R from with the hyperbolic point of view
-'''
 
 def mob_hyp(given_mob, given_point):  # checked
     a = given_mob[0][0]
@@ -148,10 +192,6 @@ def compute_fixed_points(parti, direction, shear=None):  # checked
         fixed_point = mob_parti_hyp(parti, [0, 1], False, shear)
 
     return fixed_point
-
-
-''' compute the point where the vertical axis meets the geodesic joining the attracting point of suffix
-and the repelling point of prefix'''
 
 
 def compute_point(given_suffix, given_prefix, shear=None):  # checked
@@ -226,39 +266,6 @@ def length_hyper_parti(parti):  # checked
     return length
 
 
-def min_gap_parti(parti):
-    gap=100000
-    for x in parti:
-        gap = min(gap,x.length)
-    return gap
-
-
-'''
-def hyper_der_parti(parti, shear=None):  # checked
-    ###########################################
-    # parti NEEDS will be expanded
-    ###########################################
-    if shear is None:
-        shear = [0, 0, 0]
-    else:
-        pass
-    if parti_tools.parti_is_periodic(parti):
-        pass
-    else:
-        print('parti is not periodic')
-        exit()
-
-
-    for k in range(len(parti)):
-        parti[k].point = compute_point(parti[k].suffix, parti[k].prefix, shear)[0]
-
-    for k in range(len(parti)):
-        pulled_point = pull_point(parti,k, parti[k].point, shear)
-        parti[k].length = hyp_distance(pulled_point, parti[(k + 1) % len(parti)].point)
-        parti[(k + 1)%len(parti)].der = parti[(k + 1)%len(parti)].sign * compute_angle(pulled_point, parti[(k + 1) % len(parti)].point)
-
-    return parti
-'''
 
 def read_der_parti(parti):
     der = [0,0,0]
@@ -277,20 +284,3 @@ def read_der_parti(parti):
 
 
 
-
-
-#
-# Still to be done
-#
-
-
-def highest_point(parti, pos, shear=None):
-    pass
-
-
-
-
-
-
-def time_in_cusp(parti, pos, height, shear=None):
-    pass
