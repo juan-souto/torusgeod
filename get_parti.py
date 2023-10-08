@@ -7,6 +7,7 @@ import deep_tools
 
 
 
+
 def custom_parti():
     attempt = False
     while not attempt:
@@ -119,6 +120,9 @@ def matrix_parti():
         print("The element you gave me is not the desired subgroup --- I closed it up")
         parti = parti_tools.close_parti(parti)
 
+    parti = parti_tools.add_affixes(parti)
+
+
     return parti
 
 
@@ -135,6 +139,7 @@ def find_right_estimated(coef, length, shear, n=None):
 
 
 def random_parti(desired_length,shear):
+    desired_length=int(desired_length)
     den = 10 ** desired_length
     num = random.randint(1, den)
     eta = [num, den]
@@ -220,18 +225,41 @@ def farey_parti(desired_length,shear):
     return new_parti
 
 
-'''
-def length_overestimate(parti):
-    overestimate = 0
-    for x in parti:
-        overestimate += hyper_tools.hyp_distance([0, 1], [x.inst[1], 1])
-    return overestimate
-'''
+
+def random_free_group_parti(desired_length,shear):
+    attempt = False
+    word=''
+    while not attempt:
+        while len(word) < 1.5*desired_length:
+            new_term = random.randint(0, 3)
+            if new_term == 0:
+                word += 'A'
+            elif new_term == 1:
+                word += 'a'
+            elif new_term == 2:
+                word += 'B'
+            else:
+                word += 'b'
+
+        maybe_admissible = free_group.check_admissible(word)
+        if maybe_admissible[0]:
+            attempt = True
+            if maybe_admissible[1] != maybe_admissible[2]:
+                word = maybe_admissible[2]
+            else:
+                pass
+        else:
+            pass
+
+    parti = free_group.free_group_parti(word)
+    parti = hyper_tools.hyper_parti(parti,shear)
+
+    return parti
+
 
 
 def random_simple_kette(length,shear):
 
-    ''' this might be a bit non-sensical at the end '''
 
     done = False
     while not done:
@@ -281,7 +309,6 @@ def random_simple_kette(length,shear):
     parti = parti_tools.add_affixes(parti)
 
     parti = hyper_tools.hyper_parti(parti,shear)
-#    print(hyper_tools.length_hyper_parti(parti))
 
     return parti
 
