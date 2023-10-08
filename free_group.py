@@ -1,29 +1,78 @@
 import deep_tools
+import parti_tools
 
-''' deal with elements in the fundamental group '''
 
-
-def get_element_in_free():
+def get_element_in_free(default_word=None):
     attempt = False
+    word=''
+    actual_word = ''
     while not attempt:
-        print("    A,B represent the generators of F_2 and a,b are their inverses.")
-        print("    A word is 'admissible' if can be conjugated to a cyclically reduced word starting by A.")
-        word = input("    Enter an admissible word such as in ABBaabABabAA or press 'Q' to quit:  ")
+        if default_word is None:
+            input_text ="   Enter an admissible element or press 'Q' to quit:  "
+        else:
+            input_text ="    Enter an admissible element (default is '"+default_word+"') or press 'Q' to quit:  "
+        word = input(input_text)
         deep_tools.wanna_quit(word)
-
-        if check_free_word(word):
+        maybe_admissible = check_admissible(word,default_word)
+        if maybe_admissible[0]:
             attempt = True
+            word = maybe_admissible[1]
+            actual_word = maybe_admissible[2]
         else:
             pass
-    return word
+    return [word,actual_word]
 
 
-def check_free_word(word):    # makes sure that the element in F_2 consists just of A,a,b,B
-    for x in word:
-        if x not in ['a','b','A','B']:
-            print('word has to consist of the letters A,B,a,b')
-            return False
-    return True
+def check_admissible(word,default_word=None):
+    clean = False
+    while not clean:
+        if len(word)<2:
+            clean = True
+        else:
+            k=0
+            while k<len(word)-1:
+                clean = True
+                if word[-1]+word[0] in ['Aa','aA','Bb','bB']:
+                    word = word[1:-1]
+                    clean = False
+                    break
+                elif word[k:k+2] in ['Aa','aA','Bb','bB']:
+                    word=word[:k]+word[k+2:]
+                    clean = False
+                    break
+                else:
+                    pass
+                k += 1
+    if len(word)==0:
+        if default_word is None:
+            print('Tontolaba, that was the identity')
+            input()
+            return [False,'tontolaba','tontolaba']
+        else:
+            return [True,default_word,default_word]
+    else:
+        pass
+
+    if 'A' in word:
+        new_word = word
+        return [True,word,new_word]
+    elif 'a' in word:
+        new_word = ''
+        for x in word:
+            if x == 'a':
+                new_word = 'A' + new_word
+            elif x == 'A':
+                new_word = 'a' + new_word
+            elif x == 'b':
+                new_word = 'B' + new_word
+            elif x == 'B':
+                new_word = 'B' + new_word
+            else:
+                return [False,'letter different than abAB']
+        return [True,word,new_word]
+    else:
+        return [False,'tontolaba','power_of_B']
+
 
 
 def free_word_to_tree_path(word):   # translates a cyclically reduces an element into a sequence of edge crossings
@@ -123,6 +172,15 @@ def translate_free_word_to_directions(word):
     return new_word
 
 
+def free_group_parti(word):
+    word = translate_free_word_to_directions(word)
+
+    parti = []
+    kette = parti_tools.word_to_kette(word)
+    parti = parti_tools.kette_to_parti(kette)
+    parti = parti_tools.add_affixes(parti)
+
+    return parti
 
 
 
