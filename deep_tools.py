@@ -1,9 +1,18 @@
 import math
+import os
+
 def wanna_quit(x):
     if x in ['q', 'Q']:
         exit()
     else:
         pass
+
+
+def limpia():
+    if (os.name == 'posix'):
+        os.system('clear')
+    else:
+        os.system('cls')
 
 
 def add_vector(x,y):

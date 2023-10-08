@@ -5,7 +5,6 @@ import numpy as np
 
 import parti_tools
 from matplotlib import pyplot as plt
-import os
 
 
 def line_minimisation(given_parti,given_shear):
@@ -116,7 +115,7 @@ def gradient_descent_plot(given_parti,given_shear,word):
                        'to see it on a heat map.This was maybe underwhelming... Press "Q" to quit, "H" to get\n'
                        'the heat map, an anything else to go back to the main menu. ')
     deep_tools.wanna_quit(wanna_heat)
-    os.system('cls')
+    deep_tools.limpia()
     if wanna_heat in ['h', 'H']:
         max_x = max(x)+2
         min_x = min(x)-2
@@ -152,7 +151,7 @@ def gradient_descent_plot(given_parti,given_shear,word):
     else:
         pass
 
-    os.system('cls')
+    deep_tools.limpia()
 
 
 def check_minimisation_radius(parti,shear,length,radius):
