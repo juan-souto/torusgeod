@@ -19,12 +19,12 @@ What to do with individual geodesics II --- geometric with parameters:
 - depth in cusps                                            TBD
 - longest time in a cusp                                    TBD
 - proportion of time in cusp                                TBD
-- intersection angles with edges of triangulation           TBD
+- intersection angles with edges of triangulation
 
 What to do about parameters
-- find systole                                              TBD
+- find systole
 - find maximal stretch lamination                           TBD
-- find parameters minimizing length of given curve          TBD
+- find parameters minimizing length of given curve
 
 Sources of sequences of geodesics:
 - Sequences of geodesics out of a random ray
