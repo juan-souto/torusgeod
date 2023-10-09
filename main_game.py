@@ -884,14 +884,14 @@ def heat_map_systole_function():
         else:
             shear_B = 0
         print('')
-        radius = input('Enter the radius (default=10): ')
+        radius = input('Enter the radius (default=5): ')
         if deep_tools.isDigit(radius):
-            radius = min(8.5, float(radius))
-            radius = min(radius / 2 - shear_A, radius / 2 - shear_B)
+            radius = min(18.5, 2*float(radius))
+            radius = min(radius - shear_A, radius - shear_B)
         else:
-            radius = min(5 - shear_A, 5 - shear_B)
+            radius = min(10 - shear_A, 10 - shear_B)
         if radius == 0:
-            print('The center was outside of the allowed ragion')
+            print('The center was outside of the allowed region')
         else:
             pass
         print('')
