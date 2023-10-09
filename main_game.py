@@ -276,16 +276,14 @@ def calculate_bonahon_length(word, actual_word, parti,given_length):
     print('at least length 50. If you choose the length of the random geodesic to be about 1000 it takes seconds,')
     print('if you want it to be about 5000 it takes minutes.')
     print('')
-    chosen = False
-    while not chosen:
-        wanna_length = input("Enter the desired length got the random geodesic, or press 'Q' to quit : ")
-        deep_tools.wanna_quit(wanna_length)
-        if deep_tools.isDigit(wanna_length):
-            chosen = True
-            wanna_length = float(wanna_length)
-            wanna_length = max(wanna_length, 50)
-        else:
-            pass
+    wanna_length = input("Enter the desired length (default 500) got the random geodesic, or press 'Q' to quit : ")
+    deep_tools.wanna_quit(wanna_length)
+    if deep_tools.isDigit(wanna_length):
+        chosen = True
+        wanna_length = float(wanna_length)
+        wanna_length = max(wanna_length, 50)
+    else:
+        wanna_length = 500
 
     parti2 = get_parti.random_parti(wanna_length,[0,0,0])
     length2 = hyper_tools.length_hyper_parti(parti2)
@@ -623,7 +621,7 @@ def bonahon_length_random():
           'to l(g). What we do here is test this. You choose the geodesic g and then we take a random\n'
           'sequence g_i obtained from a randomly chosen ray.')
     print('')
-    [word, actual_word] = free_group.get_element_in_free()
+    [word, actual_word] = free_group.get_element_in_free('AB')
     parti = free_group.free_group_parti(actual_word)
     act_length = hyper_tools.length_trace_free_group_word(word,[0,0,0])
     print('')
