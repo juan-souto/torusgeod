@@ -1,4 +1,3 @@
-import free_group
 import deep_tools
 
 def get_mapping_class():   # gets a mapping class and writes it as a product of L's and R's
