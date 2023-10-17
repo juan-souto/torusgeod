@@ -18,3 +18,6 @@ distinguish between random geodesics, random words in pi_1 and randomly chosen s
    Cheers,
 
    Juan
+
+   P.S.: The dist foldet contains a version executable under windows. For other operating systems you need to 
+      compile the file "main.py". You might need to add some packages to your python distribution.
