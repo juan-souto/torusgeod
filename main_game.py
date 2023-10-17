@@ -277,6 +277,13 @@ def homology_random_walk():
 
         k +=1
 
+    x = []
+    y = []
+    for k in range(len(hom_list)):
+        x.append(hom_list[k][0])
+        y.append(hom_list[k][1])
+
+
     plt.xlabel("length along the ray")
     plt.ylabel('norm of the homology')
     plt.plot(l, h, color='red')
@@ -287,14 +294,12 @@ def homology_random_walk():
     plt.show()
     print('')
     want_2dhom = input("Now we track the actual homology classes. Press 'Q' to quit or anything to continue")
+    plt.close()
     deep_tools.wanna_quit(want_2dhom)
-    x = []
-    y = []
-    for k in range(len(hom_list)):
-        x.append(hom_list[k][0])
-        y.append(hom_list[k][1])
 
     plt.plot(x, y, color='red')
+    plt.title('Actual homology class when we run along the ray.\n '
+                  'Hopefully it does look like tracking Brownian motion.')
 
     plt.show()
 
