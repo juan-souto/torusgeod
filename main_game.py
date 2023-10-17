@@ -26,6 +26,10 @@ def welcome():
     print('some general facts. In principle everything could have been done for')
     print('more general surfaces with cusps, but I am not that bored...')
     print('')
+    print('The fundamental group of the punctures torus is identified with F_2.')
+    print("A,B are the standard generators and a,b are their inverses.")
+    print('An element is "admissible" if it does not conjugate of a power of B. ')
+    print('')
     query = input('Press "Q" to Quit or anything else to proceed. ')
     deep_tools.wanna_quit(query)
     deep_tools.limpia()
@@ -36,16 +40,15 @@ def main_menu():
     print('')
     print('These are your options:')
     print('')
-    print('   (1) Enter an element in \pi_1 and see what I can do.')
+    print('   (1) Go see a few things I can do.')
     print('   (2) Go to use a couple of tools.')
-    print('   (3) Some silly demonstrations.')
     print('')
     chosen = False
     query = ''
     while not chosen:
-        query = input('Press "1", "2" or "3", or "Q" to Quit. ')
+        query = input('Press "1", "2", or "Q" to Quit. ')
         deep_tools.wanna_quit(query)
-        if query in ['1','2','3']:
+        if query in ['1','2']:
             chosen = True
         else:
             pass
@@ -53,19 +56,9 @@ def main_menu():
     deep_tools.limpia()
 
     if query == '1':
-        if times == 0:
-            print('')
-            print('The fundamental group of the punctures torus is identified with F_2.')
-            print("A,B are the standard generators and a,b are their inverses.")
-            print('An element is "admissible" if it does not conjugate of a power of B. ')
-            print('')
-        times +=1
-
-        individual_geod()
-    elif query == '2':
-        play_with_tools()
-    else:
         watch_games()
+    else:
+        play_with_tools()
     exit()
 
 def wanna_out():
@@ -77,233 +70,6 @@ def wanna_out():
         main_menu()
     else:
         pass
-
-
-def individual_geod(old_word=None,old_actual_word=None):
-    word = ''
-    actual_word = ''
-    length = 0
-    if old_word is None:
-        [word,actual_word] = free_group.get_element_in_free('ABBAAbbbAbAba')
-    else:
-        deep_tools.limpia()
-
-        print('')
-        change = input("Do you want to change your element? If you do, enter 'Y'. ")
-        if change in ['y','Y']:
-            [word,actual_word] = free_group.get_element_in_free()
-        else:
-            word = old_word
-            actual_word = old_actual_word
-
-    parti = free_group.free_group_parti(actual_word)
-    self_intersection = combinatorial_parti.compute_intersection_number(parti,parti)
-    homology_class = combinatorial_parti.parti_homology(parti)[:2]
-    if word != actual_word:
-        homology_class = deep_tools.scalar_prod(-1,homology_class)
-    else:
-        pass
-    parti = hyper_tools.hyper_parti(parti,[0,0,0])
-
-    deep_tools.limpia()
-
-    print('')
-    print("Element = ",word)
-    print('   Homology class             : ',homology_class)
-    print('   Self-intersection number   : ',self_intersection)
-    real_length = hyper_tools.length_trace_free_group_word(word,[0,0,0])
-    print('   Length in the square torus : ',real_length)
-    print('')
-    if self_intersection == 0:
-        print('   The element ',word,' is simple and hence its infimum length over Teichmueller space is equal to 0')
-        print('')
-        input('Press any key to continue. ')
-
-    else:
-        routine_length_minimisation(word, actual_word, parti, real_length)
-
-    deep_tools.limpia()
-
-    after_basic_options(word,actual_word,parti,real_length)
-
-
-def routine_length_minimisation(word,actual_word,parti,real_length):
-    [min_shear, length, loops, steps] = minimisation.gradient_descent(parti, [0, 0, 0])
-
-    print('')
-    print('   It seems that the length of the given element is minimised for a torus with ')
-    print('      shear coordinates more or less equal to')
-    print('           ', min_shear)
-    print('      There, the length function takes the value ', length)
-    print('      Moreover, the systole in that torus is ', find_systole.find_systole(min_shear))
-    print('')
-    print('   How accurate is the minimisation proces?')
-    radius = len(parti) / 200
-    print('      For a word of your length, most of the time gradient descend seems to give a result')
-    print('      within distance ', radius, ' of the actual minimiser, but sometimes the error')
-    print('      is larger.')
-    print(' ')
-    wanna_check = input('   Press "Y" if want to check? (It might take a while.) ')
-    if wanna_check in ['y', 'Y']:
-        powers = minimisation.check_minimisation_radius(parti, min_shear, length, radius)
-        print('')
-        adjective = ''
-        if powers == 1:
-            adjective = 'indeed is'
-        else:
-            adjective = 'is rather'
-        print('      I am done checking: It seems to me that the actual minimum '+adjective+' within ', powers * radius)
-        print('         of the estimated point.')
-        print('')
-
-        wanna_do = input("Press 'H' for a minimal description of how did the distance get bounded,\n"
-                         "or any other key to continue. ")
-
-        if wanna_do in ['h','H']:
-            print('')
-            print('The length function is convex in shear coordinates. It thus follows that to decide if the minimum \n'
-                  'is inside some closed convex set K it suffices to prove that the minimum of the length function on \n'
-                  'on K is taken in the interior. In this case I am interested in round balls B(x,r) around the \n'
-                  'minimizer x. To "check" whether the minimum of the length function is taken in the interior of the \n'
-                  'ball I calculate the length function at a bunch of points in the boundary. More specifically, \n'
-                  'starting with k=1, I calculate for the length at 200 * k points at distance "R = k times the estimated\n'
-                  'radius". If I do not find any point where the length is smaller than at x, then I infer that the \n'
-                  'minimum is indeed achieved within "R" of x. Otherwise I increase k to 2k, 4k, 8k,...')
-            print('')
-            input('Press any key to continue.')
-    else:
-        print('')
-
-    return [word,actual_word,parti,real_length]
-
-
-def after_basic_options(word,actual_word,parti,given_length):
-    deep_tools.limpia()
-
-    print('')
-    print('Here are your current options:')
-    print('')
-    print('   (1) Calculate the intersection number with another element')
-    print('   (2) Calculate the length of the given element in another torus')
-    print('   (3) Use a random curve in the square torus to estimate the length ')
-    print('       and see how this compares to the actual value.')
-    print('   (4) Enter a new element altogether.')
-    print('')
-    chosen = False
-    wanna_do = ''
-    while not chosen:
-        wanna_do = input("Enter '1', '2', '3', '4', 'B' to go back to the main menu or 'Q' to quit. ")
-        deep_tools.wanna_quit(wanna_do)
-        if wanna_do in ['1','2','3','4','b','B']:
-            chosen = True
-        else:
-            pass
-    deep_tools.limpia()
-
-    if wanna_do == '1':
-        intersection_with_curve(word,actual_word,parti,given_length)
-    elif wanna_do == '2':
-        bla = calculate_length_elsewhere(word, actual_word, parti,given_length)
-        print('')
-        input('Press any key to continue')
-        deep_tools.limpia()
-        after_basic_options(bla[0],bla[1],bla[2],bla[3])
-    elif wanna_do == '3':
-        calculate_bonahon_length(word, actual_word, parti,given_length)
-    elif wanna_do == '4':
-        print('')
-        individual_geod()
-    else:
-        main_menu()
-
-
-def intersection_with_curve(word, actual_word, parti,given_length):
-    print('')
-    print('Please enter the second element in \pi_1.')
-    print("Recall that A,B are the standard generators and a,b are their inverses, and that")
-    print("and that we only admit elements which are not conjugated to a power of B.")
-    print('')
-    [word2, actual_word2] = free_group.get_element_in_free('ABBA')
-    parti2 = free_group.free_group_parti(actual_word2)
-    intersection = combinatorial_parti.compute_intersection_number(parti, parti2)
-    print('')
-    print('Geometric intersection number:')
-    print('    i(',word,',',word2,') = ',intersection)
-    print('')
-    input('Press any key to continue.')
-
-    after_basic_options(word, actual_word, parti,given_length)
-
-def calculate_length_elsewhere(word, actual_word, parti,given_length):
-    print("   We consider shearing coordinates on the punctured torus. If we think of the punctured torus")
-    print('as the square torus punctured at the vertex, then shear_1 is the shearing along the vertical side,')
-    print('shear_2 is the shearing along the horizontal side, and shear_3 is the shear only the diagonal')
-    print('parallel to y=-x.')
-    print('   This convention is so that shear_1, when the others are unchanged, does not change the length of B.')
-    print('Similarly, shear_2 by itself does not change the length of A.')
-    print('')
-    shear_A = input("shear_1 (default is 0) = ")
-    if deep_tools.isDigit(shear_A):
-        shear_A = float(shear_A)
-    else:
-        shear_A = 0
-    shear_B = input("shear_2 (default is 0) = ")
-    if deep_tools.isDigit(shear_B):
-        shear_B = float(shear_B)
-    else:
-        shear_B = 0
-
-    print("shear_3 (default is ", end='')
-    print(-shear_A - shear_B, end="")
-    shear_C = input(" so that the peripheral curve is parabolic): ")
-    if deep_tools.isDigit(shear_C):
-        shear_C = float(shear_C)
-    else:
-        shear_C = -shear_A - shear_B
-    shear = [shear_A, shear_B, shear_C]
-    print('')
-
-    new_length = hyper_tools.length_trace_free_group_word(word,shear)
-    print('The element ',word,' has length ',new_length,' at the torus ',shear)
-
-    return [word,actual_word,parti,given_length]
-
-
-def calculate_bonahon_length(word, actual_word, parti,given_length):
-    print("   We estimate the length of the given element via computing the intersection number with a")
-    print('random geodesic, that is one which approaches the Liouville measure.')
-    print('You can choose about how long you want that random geodesic to be. To avoid silly issues I force it to have')
-    print('at least length 50. If you choose the length of the random geodesic to be about 1000 it takes seconds,')
-    print('if you want it to be about 5000 it takes minutes.')
-    print('')
-    wanna_length = input("Enter the desired length (default 500) got the random geodesic, or press 'Q' to quit : ")
-    deep_tools.wanna_quit(wanna_length)
-    if deep_tools.isDigit(wanna_length):
-        chosen = True
-        wanna_length = float(wanna_length)
-        wanna_length = max(wanna_length, 50)
-    else:
-        wanna_length = 500
-
-    parti2 = get_parti.random_parti(wanna_length,[0,0,0])
-    length2 = hyper_tools.length_hyper_parti(parti2)
-    print('')
-    print('We will be working with a random geodesic of')
-    print('length(random) = ',length2)
-    print('Geometric intersection number:')
-    intersection = combinatorial_parti.compute_intersection_number(parti, parti2)
-    print('    i(',word,', random ) = ',intersection)
-    print('Estimated length of ',word)
-    est_length = intersection*(math.pi**2)/length2
-    error = int(10000*((est_length/given_length)-1))/100
-    print('    Estimated length = ',intersection*(math.pi**2)/length2)
-    print('    Actual length    = ',given_length)
-    print('    Error            = ',error,'%')
-    print('')
-    wanna_do = input("Press 'Q' to quit or anything else to continue. ")
-    deep_tools.wanna_quit(wanna_do)
-
-    after_basic_options(word, actual_word, parti,given_length)
 
 
 
@@ -408,6 +174,10 @@ def play_with_tools():
 
 
 
+
+
+
+
 #######################################
 #######################################
 
@@ -422,14 +192,15 @@ def watch_games():
         print('   (6) Heatmap of the length function')
         print('   (7) Heatmap of the systole function')
         print('   (8) Length of a random geodesic in another torus.')
+        print('   (9) Calculate things for a given geodesic.')
         print('')
 
         chosen = False
         wanna_do = ''
         while not chosen:
-            wanna_do = input("Press '1', '2', '3', '4', '5', '6', '7', '8', 'Q' to quit or 'B' to go back. ")
+            wanna_do = input("Press '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Q' to quit or 'B' to go back. ")
             deep_tools.wanna_quit(wanna_do)
-            if wanna_do in ['1','2','3','4','5','6','7','8','B','b']:
+            if wanna_do in ['1','2','3','4','5','6','7','8','9','B','b']:
                 chosen = True
             else:
                 pass
@@ -457,6 +228,8 @@ def watch_games():
             heat_map_systole_function()
         elif wanna_do == '8':
             compare_in_different_tori()
+        elif wanna_do == '9':
+            individual_geod()
         else:
             pass
         wanna_out()
@@ -991,3 +764,237 @@ def compare_in_different_tori():
 
 
         have_done = True
+
+
+
+#####################################################
+# 9 = look at individual geodesics
+#####################################################
+
+def individual_geod(old_word=None,old_actual_word=None):
+    word = ''
+    actual_word = ''
+    length = 0
+    if old_word is None:
+        [word,actual_word] = free_group.get_element_in_free('ABBAAbbbAbAba')
+    else:
+        deep_tools.limpia()
+
+        print('')
+        change = input("Do you want to change your element? If you do, enter 'Y'. ")
+        if change in ['y','Y']:
+            [word,actual_word] = free_group.get_element_in_free()
+        else:
+            word = old_word
+            actual_word = old_actual_word
+
+    parti = free_group.free_group_parti(actual_word)
+    self_intersection = combinatorial_parti.compute_intersection_number(parti,parti)
+    homology_class = combinatorial_parti.parti_homology(parti)[:2]
+    if word != actual_word:
+        homology_class = deep_tools.scalar_prod(-1,homology_class)
+    else:
+        pass
+    parti = hyper_tools.hyper_parti(parti,[0,0,0])
+
+    deep_tools.limpia()
+
+    print('')
+    print("Element = ",word)
+    print('   Homology class             : ',homology_class)
+    print('   Self-intersection number   : ',self_intersection)
+    real_length = hyper_tools.length_trace_free_group_word(word,[0,0,0])
+    print('   Length in the square torus : ',real_length)
+    print('')
+    if self_intersection == 0:
+        print('   The element ',word,' is simple and hence its infimum length over Teichmueller space is equal to 0')
+        print('')
+        input('Press any key to continue. ')
+
+    else:
+        routine_length_minimisation(word, actual_word, parti, real_length)
+
+    deep_tools.limpia()
+
+    after_basic_options(word,actual_word,parti,real_length)
+
+
+def routine_length_minimisation(word,actual_word,parti,real_length):
+    [min_shear, length, loops, steps] = minimisation.gradient_descent(parti, [0, 0, 0])
+
+    print('')
+    print('   It seems that the length of the given element is minimised for a torus with ')
+    print('      shear coordinates more or less equal to')
+    print('           ', min_shear)
+    print('      There, the length function takes the value ', length)
+    print('      Moreover, the systole in that torus is ', find_systole.find_systole(min_shear))
+    print('')
+    print('   How accurate is the minimisation proces?')
+    radius = len(parti) / 200
+    print('      For a word of your length, most of the time gradient descend seems to give a result')
+    print('      within distance ', radius, ' of the actual minimiser, but sometimes the error')
+    print('      is larger.')
+    print(' ')
+    wanna_check = input('   Press "Y" if want to check? (It might take a while.) ')
+    if wanna_check in ['y', 'Y']:
+        powers = minimisation.check_minimisation_radius(parti, min_shear, length, radius)
+        print('')
+        adjective = ''
+        if powers == 1:
+            adjective = 'indeed is'
+        else:
+            adjective = 'is rather'
+        print('      I am done checking: It seems to me that the actual minimum '+adjective+' within ', powers * radius)
+        print('         of the estimated point.')
+        print('')
+
+        wanna_do = input("Press 'H' for a minimal description of how did the distance get bounded,\n"
+                         "or any other key to continue. ")
+
+        if wanna_do in ['h','H']:
+            print('')
+            print('The length function is convex in shear coordinates. It thus follows that to decide if the minimum \n'
+                  'is inside some closed convex set K it suffices to prove that the minimum of the length function on \n'
+                  'on K is taken in the interior. In this case I am interested in round balls B(x,r) around the \n'
+                  'minimizer x. To "check" whether the minimum of the length function is taken in the interior of the \n'
+                  'ball I calculate the length function at a bunch of points in the boundary. More specifically, \n'
+                  'starting with k=1, I calculate for the length at 200 * k points at distance "R = k times the estimated\n'
+                  'radius". If I do not find any point where the length is smaller than at x, then I infer that the \n'
+                  'minimum is indeed achieved within "R" of x. Otherwise I increase k to 2k, 4k, 8k,...')
+            print('')
+            input('Press any key to continue.')
+    else:
+        print('')
+
+    return [word,actual_word,parti,real_length]
+
+
+def after_basic_options(word,actual_word,parti,given_length):
+    deep_tools.limpia()
+
+    print('')
+    print('Here are your current options:')
+    print('')
+    print('   (1) Calculate the intersection number with another element')
+    print('   (2) Calculate the length of the given element in another torus')
+    print('   (3) Use a random curve in the square torus to estimate the length ')
+    print('       and see how this compares to the actual value.')
+    print('   (4) Enter a new element altogether.')
+    print('')
+    chosen = False
+    wanna_do = ''
+    while not chosen:
+        wanna_do = input("Enter '1', '2', '3', '4', 'B' to go back to the main menu or 'Q' to quit. ")
+        deep_tools.wanna_quit(wanna_do)
+        if wanna_do in ['1','2','3','4','b','B']:
+            chosen = True
+        else:
+            pass
+    deep_tools.limpia()
+
+    if wanna_do == '1':
+        intersection_with_curve(word,actual_word,parti,given_length)
+    elif wanna_do == '2':
+        bla = calculate_length_elsewhere(word, actual_word, parti,given_length)
+        print('')
+        input('Press any key to continue')
+        deep_tools.limpia()
+        after_basic_options(bla[0],bla[1],bla[2],bla[3])
+    elif wanna_do == '3':
+        calculate_bonahon_length(word, actual_word, parti,given_length)
+    elif wanna_do == '4':
+        print('')
+        individual_geod()
+    else:
+        main_menu()
+
+
+def intersection_with_curve(word, actual_word, parti,given_length):
+    print('')
+    print('Please enter the second element in \pi_1.')
+    print("Recall that A,B are the standard generators and a,b are their inverses, and that")
+    print("and that we only admit elements which are not conjugated to a power of B.")
+    print('')
+    [word2, actual_word2] = free_group.get_element_in_free('ABBA')
+    parti2 = free_group.free_group_parti(actual_word2)
+    intersection = combinatorial_parti.compute_intersection_number(parti, parti2)
+    print('')
+    print('Geometric intersection number:')
+    print('    i(',word,',',word2,') = ',intersection)
+    print('')
+    input('Press any key to continue.')
+
+    after_basic_options(word, actual_word, parti,given_length)
+
+def calculate_length_elsewhere(word, actual_word, parti,given_length):
+    print("   We consider shearing coordinates on the punctured torus. If we think of the punctured torus")
+    print('as the square torus punctured at the vertex, then shear_1 is the shearing along the vertical side,')
+    print('shear_2 is the shearing along the horizontal side, and shear_3 is the shear only the diagonal')
+    print('parallel to y=-x.')
+    print('   This convention is so that shear_1, when the others are unchanged, does not change the length of B.')
+    print('Similarly, shear_2 by itself does not change the length of A.')
+    print('')
+    shear_A = input("shear_1 (default is 0) = ")
+    if deep_tools.isDigit(shear_A):
+        shear_A = float(shear_A)
+    else:
+        shear_A = 0
+    shear_B = input("shear_2 (default is 0) = ")
+    if deep_tools.isDigit(shear_B):
+        shear_B = float(shear_B)
+    else:
+        shear_B = 0
+
+    print("shear_3 (default is ", end='')
+    print(-shear_A - shear_B, end="")
+    shear_C = input(" so that the peripheral curve is parabolic): ")
+    if deep_tools.isDigit(shear_C):
+        shear_C = float(shear_C)
+    else:
+        shear_C = -shear_A - shear_B
+    shear = [shear_A, shear_B, shear_C]
+    print('')
+
+    new_length = hyper_tools.length_trace_free_group_word(word,shear)
+    print('The element ',word,' has length ',new_length,' at the torus ',shear)
+
+    return [word,actual_word,parti,given_length]
+
+
+def calculate_bonahon_length(word, actual_word, parti,given_length):
+    print("   We estimate the length of the given element via computing the intersection number with a")
+    print('random geodesic, that is one which approaches the Liouville measure.')
+    print('You can choose about how long you want that random geodesic to be. To avoid silly issues I force it to have')
+    print('at least length 50. If you choose the length of the random geodesic to be about 1000 it takes seconds,')
+    print('if you want it to be about 5000 it takes minutes.')
+    print('')
+    wanna_length = input("Enter the desired length (default 500) got the random geodesic, or press 'Q' to quit : ")
+    deep_tools.wanna_quit(wanna_length)
+    if deep_tools.isDigit(wanna_length):
+        chosen = True
+        wanna_length = float(wanna_length)
+        wanna_length = max(wanna_length, 50)
+    else:
+        wanna_length = 500
+
+    parti2 = get_parti.random_parti(wanna_length,[0,0,0])
+    length2 = hyper_tools.length_hyper_parti(parti2)
+    print('')
+    print('We will be working with a random geodesic of')
+    print('length(random) = ',length2)
+    print('Geometric intersection number:')
+    intersection = combinatorial_parti.compute_intersection_number(parti, parti2)
+    print('    i(',word,', random ) = ',intersection)
+    print('Estimated length of ',word)
+    est_length = intersection*(math.pi**2)/length2
+    error = int(10000*((est_length/given_length)-1))/100
+    print('    Estimated length = ',intersection*(math.pi**2)/length2)
+    print('    Actual length    = ',given_length)
+    print('    Error            = ',error,'%')
+    print('')
+    wanna_do = input("Press 'Q' to quit or anything else to continue. ")
+    deep_tools.wanna_quit(wanna_do)
+
+    after_basic_options(word, actual_word, parti,given_length)
+
+
